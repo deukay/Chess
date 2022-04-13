@@ -1,6 +1,10 @@
 table {
     outline: 5px solid black;
     outline-offset: -2px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 td {
@@ -20,4 +24,9 @@ tr:nth-child(even) > td:nth-child(odd) {
 
 tr:nth-child(odd) > td:nth-child(even) {
     background-color: #779556;
+}
+
+td:hover {
+    outline: 2px solid black;
+    outline-offset: -2px;
 }
