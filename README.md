@@ -1,2 +1,2 @@
 # Chess
-chess board
+chess board project

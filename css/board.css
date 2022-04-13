@@ -1,0 +1,23 @@
+table {
+    outline: 5px solid black;
+    outline-offset: -2px;
+}
+
+td {
+    display: flex;
+    height: 80px;
+    width: 80px;
+    background-color: #ebecd0;
+}
+
+tr {
+    display: flex;
+}
+
+tr:nth-child(even) > td:nth-child(odd) {
+    background-color: #779556;
+}
+
+tr:nth-child(odd) > td:nth-child(even) {
+    background-color: #779556;
+}
