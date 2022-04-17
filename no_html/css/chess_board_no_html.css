@@ -1,4 +1,4 @@
-/*table {
+table {
     outline: 5px solid black;
     outline-offset: -2px;
     position: absolute;
@@ -9,23 +9,24 @@
 
 td {
     display: flex;
+    background-repeat: no-repeat;
+    background-position: center;
+
     height: 80px;
     width: 80px;
-    background-color: #ebecd0;
 }
 
 tr {
     display: flex;
 }
 
-tr:nth-child(even) > td:nth-child(odd) {
+.lightSquare {
     background-color: #779556;
 }
 
-tr:nth-child(odd) > td:nth-child(even) {
-    background-color: #779556;
-}*/
-/* remove comment if you want to remove the css part from the js */
+.darkSquare {
+    background-color: #ebecd0;
+}
 
 td:hover {
     outline: 2px solid black;
