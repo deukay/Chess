@@ -28,6 +28,22 @@ tr {
     background-color: #ebecd0;
 }
 
+.selected {
+    background-color: orange;
+    outline: 4px solid black;
+    outline-offset: -4px;
+}
+
+.moveSpot {
+    outline: 3px dashed gold;
+    outline-offset: -25px;
+}
+
+.eatSpot {
+    outline: 3px dashed red;
+    outline-offset: -25px;
+}
+
 td:hover {
     outline: 2px solid black;
     outline-offset: -2px;

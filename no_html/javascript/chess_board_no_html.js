@@ -1,18 +1,22 @@
 window.addEventListener('load', mainFunc);
 
+let pieces = []; //array that contains all the game pieces
+
 function mainFunc() {
     const body = document.body;
     const table = document.createElement('table');
+    table.setAttribute('id:', 'chess_table');
+
     body.appendChild(table);
 
-    pieces = []; //array that contains all the game pieces
     placePieces(); //adds the pieces to the array
+    pieces.push(new c_piece(4, 1, 5, false, true)); //rook
 
     for (let i = 0; i < 8; i++) {
-        const tr = table.insertRow();
+        const tr = table.insertRow(i);
         for (let j = 0; j < 8; j++) {
-            const td = tr.insertCell();
-            td.onclick = () => {clickedTD(td, j, i)};
+            const td = tr.insertCell(j);
+            td.onclick = (e) => {clickedTD(e, j, i)};
             if ((j + i) % 2 != 0) {
                 td.className = "lightSquare"
             } else {
@@ -22,19 +26,15 @@ function mainFunc() {
     }
 
     pieces.forEach(piece => {
-        const tds = document.getElementsByTagName("td");
-        tds[piece.getArrPos()].style.backgroundImage = "url(assets/" + piece.getImg() + ".png)";
+        table.rows[piece.y].cells[piece.x].style.backgroundImage = "url(assets/" + piece.getImg() + ".png)";
     });
 }
 
-function clickedTD(td, x, y) {
+function clickedTD(event, x, y) {
     //repaint the whole board
     repaintBoard();
-
     //color the current selected pixel
-    td.style.backgroundColor = 'orange';
-    td.style.outline = "4px solid black";
-    td.style.outlineOffset = "-4px";
+    event.currentTarget.classList.add('selected');
 
     //paint possible moves for selected piece
     showMoves(x, y);
@@ -42,35 +42,36 @@ function clickedTD(td, x, y) {
 }
 
 function repaintBoard() {
-    const tds = document.getElementsByTagName("td");
+    const table = document.getElementsByTagName("table");
+
     for (let y = 0; y < 8; y++) {
         for (let x = 0; x < 8; x++) {
-            if ((x + y) % 2 != 0) {
-                tds[y*8 + x].style.backgroundColor = "#779556";
-            } else {
-                tds[y*8 + x].style.backgroundColor = "#ebecd0";
-            }
-            tds[y*8 + x].style.outline = "";
-            tds[y*8 + x].style.outlineOffset = "";
+            table[0].rows[y].cells[x].classList.remove('selected');
+            table[0].rows[y].cells[x].classList.remove('moveSpot');
+            table[0].rows[y].cells[x].classList.remove('eatSpot');
         }
     }
 }
 
 function showMoves(x, y) {
     let posMoves = [];
+    const table = document.getElementsByTagName("table");
     //get possible moves for piece
     pieces.forEach(piece => {
-        if (piece.getArrPos() == (y*8+x)) {
-            posMoves = piece.possibleMoves();
+        if (piece.x == x && piece.y == y) {
+            posMoves = piece.possibleMoves(pieces);
         }
     });
     //paint possible moves on board
     const tds = document.getElementsByTagName("td");
-    for (let i = 0; i < posMoves.length; i+=2) {
-        // console.log("NOOt WOW: " + posMoves[i + 1] + " * 8 " + posMoves[i]);
-        // console.log("Much WOW SUM: " + Number(posMoves[i + 1] * 8 + posMoves[i]));
-        tds[posMoves[i + 1] * 8 + posMoves[i]].style.outline = "3px dashed gold";
-        tds[posMoves[i + 1] * 8 + posMoves[i]].style.outlineOffset = "-25px";
+    for (let i = 0; i < posMoves[0].length; i+=2) {
+        // console.log("NOOt WOW: " + posMoves[0][i + 1] + " * 8 " + posMoves[0][i]);
+        // console.log("Much WOW SUM: " + Number(posMoves[0][i + 1] * 8 + posMoves[0][i]));
+        table[0].rows[posMoves[0][i + 1]].cells[posMoves[0][i]].classList.add('moveSpot');
+    }
+
+    for (let i = 0; i < posMoves[1].length; i+=2) {
+        table[0].rows[posMoves[1][i + 1]].cells[posMoves[1][i]].classList.add('eatSpot');
     }
 
 }
