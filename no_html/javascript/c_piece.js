@@ -120,7 +120,8 @@ class c_piece {
                     movesPos.push(position)
                 });
                 */
-                // for some reason js hates recursion so I have to copy this shit like that instead vv...
+                // for some reason js hates recursion so I have to copy this all of these from below
+                // like that instead vv...
                 //rook moveset
                 if(this.x < 7) { // +x (right side)
                     for (let i = 1; i <= 7 - this.x; i++) {

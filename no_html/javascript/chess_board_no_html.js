@@ -2,6 +2,7 @@ window.addEventListener('load', mainFunc);
 
 let pieces = []; //array that contains all the game pieces
 let selected = [];
+let isWhiteTurn = true;
 
 function mainFunc() {
     const body = document.body;
@@ -31,15 +32,35 @@ function mainFunc() {
     });
 }
 
-function movePiece(piece, x,y) {
-    console.log("SALKDSLKASd");
+function movePiece(x, y) {
+    isWhiteTurn = !isWhiteTurn;
+    for (const piece of pieces) {
+        if (piece.x == selected[1] && piece.y == selected[2]) {
+            piece.x = x;
+            piece.y = y;
+            return false;
+        }
+    }
 }
 
-function eatPiece(piece, x,y) {
-    console.log("asdasda");
+function eatPiece(x, y) {
+    isWhiteTurn = !isWhiteTurn;
+    for (const piece of pieces) {
+        if (piece.x == x && piece.y == y) {
+            console.log(pieces);
+            pieces.splice(pieces.indexOf(piece), 1);
+        }
+        if (piece.x == selected[1] && piece.y == selected[2]) {
+            piece.x = x;
+            piece.y = y;
+            return false;
+        }
+    }
 }
 
 function clickedTD(event, x, y) {
+    
+    let colorSelected = true;
     //try to move the piece
     if (selected.length !== 0 && selected[0] !== event.currentTarget) {
         //get moves of last select
@@ -49,14 +70,14 @@ function clickedTD(event, x, y) {
         if(lastMoves.length > 0) {//check if clicked spot is a move spot
             for (let i = 0; i < lastMoves[0].length; i+=2) {
                 if(lastMoves[0][i] == x && lastMoves[0][i+1] == y) {
-                    movePiece(event.currentTarget, x, y);
+                    colorSelected = movePiece(x, y);
                 }
             }
 
             //check if clicked spot is a eat spot
             for (let i = 0; i < lastMoves[1].length; i+=2) {
                 if(lastMoves[1][i] == x && lastMoves[1][i+1] == y) {
-                    eatPiece(event.currentTarget, x, y);
+                    colorSelected = eatPiece(x, y);
                 }
             }
 
@@ -67,12 +88,14 @@ function clickedTD(event, x, y) {
         selected[0] = event.currentTarget;
         selected[1] = x;
         selected[2] = y;
+        if(colorSelected) {
+            //color the current selected pixel
+            selected[0].classList.add('selected');
+        
+            //paint possible moves for selected piece
+            showMoves(x, y);
+        }
 
-        //color the current selected pixel
-        selected[0].classList.add('selected');
-    
-        //paint possible moves for selected piece
-        showMoves(x, y);
     //if there wasnt a selection before
     } else if(selected.length === 0) {
         selected[0] = event.currentTarget;
@@ -96,12 +119,13 @@ function repaintBoard() {
             table[0].rows[y].cells[x].classList.remove('selected');
             table[0].rows[y].cells[x].classList.remove('moveSpot');
             table[0].rows[y].cells[x].classList.remove('eatSpot');
+            table[0].rows[y].cells[x].style.backgroundImage = "";
         }
     }
-
     pieces.forEach(piece => {
         table[0].rows[piece.y].cells[piece.x].style.backgroundImage = "url(assets/" + piece.getImg() + ".png)";
     });
+
 }
 
 function getMoves(x,y) {
@@ -136,6 +160,7 @@ function showMoves(x, y) {
 function placePieces() {
     for (let i = 0; i < 2; i++) {
         //i !== 0 is white(true) pieces so the line number would be able to be i * 7
+        //purpose of i is 0 it places it in 0=y and when its 1 its y=7 cuz i*7
         for (let j = 0; j < 16; j++) {
             if(j == 0 || j == 7) {
                 pieces.push(new c_piece(j, i * 7, 2, i !== 0, true)); //rook
@@ -147,12 +172,9 @@ function placePieces() {
                 pieces.push(new c_piece(j, i * 7, 1, i !== 0, true)); //queen
             } else if(j == 4) {
                 pieces.push(new c_piece(j, i * 7, 0, i !== 0, true)); //king
-            }
-            if(j > 7 && i == 0) {
-                pieces.push(new c_piece(j-8, 1, 5, false, true)); //pawn black
-            } else if(j > 7 && i == 1) {
-                pieces.push(new c_piece(j-8, 6, 5, true, true)); //pawn white
-            }
+            } else if(j > 7) {
+                pieces.push(new c_piece(j-8, i*5 + 1, 5, i !== 0, true)); //pawn
+            } 
         }
     }
 }
