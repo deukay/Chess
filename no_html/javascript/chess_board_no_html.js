@@ -1,6 +1,7 @@
 window.addEventListener('load', mainFunc);
 
 let pieces = []; //array that contains all the game pieces
+let selected = [];
 
 function mainFunc() {
     const body = document.body;
@@ -10,7 +11,7 @@ function mainFunc() {
     body.appendChild(table);
 
     placePieces(); //adds the pieces to the array
-    pieces.push(new c_piece(4, 1, 5, false, true)); //rook
+    // pieces.push(new c_piece(4, 5, 5, false, true)); //rook
 
     for (let i = 0; i < 8; i++) {
         const tr = table.insertRow(i);
@@ -30,15 +31,61 @@ function mainFunc() {
     });
 }
 
+function movePiece(piece, x,y) {
+    console.log("SALKDSLKASd");
+}
+
+function eatPiece(piece, x,y) {
+    console.log("asdasda");
+}
+
 function clickedTD(event, x, y) {
-    //repaint the whole board
-    repaintBoard();
-    //color the current selected pixel
-    event.currentTarget.classList.add('selected');
+    //try to move the piece
+    if (selected.length !== 0 && selected[0] !== event.currentTarget) {
+        //get moves of last select
+        let lastMoves = getMoves(selected[1], selected[2]);
 
-    //paint possible moves for selected piece
-    showMoves(x, y);
+        //check if last clicked spot wasnt empty
+        if(lastMoves.length > 0) {//check if clicked spot is a move spot
+            for (let i = 0; i < lastMoves[0].length; i+=2) {
+                if(lastMoves[0][i] == x && lastMoves[0][i+1] == y) {
+                    movePiece(event.currentTarget, x, y);
+                }
+            }
 
+            //check if clicked spot is a eat spot
+            for (let i = 0; i < lastMoves[1].length; i+=2) {
+                if(lastMoves[1][i] == x && lastMoves[1][i+1] == y) {
+                    eatPiece(event.currentTarget, x, y);
+                }
+            }
+
+        }
+        //repaint the whole board
+        repaintBoard();
+
+        selected[0] = event.currentTarget;
+        selected[1] = x;
+        selected[2] = y;
+
+        //color the current selected pixel
+        selected[0].classList.add('selected');
+    
+        //paint possible moves for selected piece
+        showMoves(x, y);
+    //if there wasnt a selection before
+    } else if(selected.length === 0) {
+        selected[0] = event.currentTarget;
+        selected[1] = x;
+        selected[2] = y;
+
+        //color the current selected pixel
+        selected[0].classList.add('selected');
+        
+        //paint possible moves for selected piece
+        showMoves(x, y);
+
+    }
 }
 
 function repaintBoard() {
@@ -51,29 +98,39 @@ function repaintBoard() {
             table[0].rows[y].cells[x].classList.remove('eatSpot');
         }
     }
+
+    pieces.forEach(piece => {
+        table[0].rows[piece.y].cells[piece.x].style.backgroundImage = "url(assets/" + piece.getImg() + ".png)";
+    });
 }
 
-function showMoves(x, y) {
-    let posMoves = [];
-    const table = document.getElementsByTagName("table");
+function getMoves(x,y) {
+    let output = [];
     //get possible moves for piece
     pieces.forEach(piece => {
         if (piece.x == x && piece.y == y) {
-            posMoves = piece.possibleMoves(pieces);
+            piece.possibleMoves(pieces).forEach(move => {
+                output.push(move);
+            });
         }
     });
+    return output;
+}
+
+function showMoves(x, y) {
+    let posMoves = getMoves(x,y);
+    const table = document.getElementsByTagName("table");
     //paint possible moves on board
     const tds = document.getElementsByTagName("td");
-    for (let i = 0; i < posMoves[0].length; i+=2) {
-        // console.log("NOOt WOW: " + posMoves[0][i + 1] + " * 8 " + posMoves[0][i]);
-        // console.log("Much WOW SUM: " + Number(posMoves[0][i + 1] * 8 + posMoves[0][i]));
-        table[0].rows[posMoves[0][i + 1]].cells[posMoves[0][i]].classList.add('moveSpot');
+    if(posMoves.length > 0) {
+        for (let i = 0; i < posMoves[0].length; i+=2) {
+            table[0].rows[posMoves[0][i + 1]].cells[posMoves[0][i]].classList.add('moveSpot');
+        }
+    
+        for (let i = 0; i < posMoves[1].length; i+=2) {
+            table[0].rows[posMoves[1][i + 1]].cells[posMoves[1][i]].classList.add('eatSpot');
+        }
     }
-
-    for (let i = 0; i < posMoves[1].length; i+=2) {
-        table[0].rows[posMoves[1][i + 1]].cells[posMoves[1][i]].classList.add('eatSpot');
-    }
-
 }
 
 function placePieces() {
