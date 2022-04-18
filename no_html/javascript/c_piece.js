@@ -80,6 +80,7 @@ class c_piece {
 
     //setting a default so we can call it again in queen
     //move_type = this.p_type for recursion but cant use for some reason cuz js hates it
+    //TODO: maybe move each switch to a func so it will be more readable
     possibleMoves(pieces, move_type = this.p_type) {
         let movesPos = [];
         let eatPos = [];

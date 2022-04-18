@@ -12,7 +12,6 @@ function mainFunc() {
     body.appendChild(table);
 
     placePieces(); //adds the pieces to the array
-    // pieces.push(new c_piece(4, 5, 5, false, true)); //rook
 
     for (let i = 0; i < 8; i++) {
         const tr = table.insertRow(i);
@@ -32,84 +31,96 @@ function mainFunc() {
     });
 }
 
-function movePiece(x, y) {
+function movePiece(lastSelectedPiece, x, y) {
     isWhiteTurn = !isWhiteTurn;
-    for (const piece of pieces) {
-        if (piece.x == selected[1] && piece.y == selected[2]) {
-            piece.x = x;
-            piece.y = y;
-            return false;
-        }
-    }
+    lastSelectedPiece.x = x;
+    lastSelectedPiece.y = y;
+    return false;
 }
 
-function eatPiece(x, y) {
-    isWhiteTurn = !isWhiteTurn;
-    for (const piece of pieces) {
-        if (piece.x == x && piece.y == y) {
-            console.log(pieces);
-            pieces.splice(pieces.indexOf(piece), 1);
-        }
-        if (piece.x == selected[1] && piece.y == selected[2]) {
-            piece.x = x;
-            piece.y = y;
-            return false;
-        }
-    }
+function eatPiece(lastSelectedPiece, selectedPiece, x, y) {
+    pieces.splice(pieces.indexOf(selectedPiece), 1);
+    return movePiece(lastSelectedPiece, x, y);
 }
 
 function clickedTD(event, x, y) {
     
     let colorSelected = true;
-    //try to move the piece
-    if (selected.length !== 0 && selected[0] !== event.currentTarget) {
+
+    let lastSelectedPiece; //lastSelectedPiece
+    let selectedPiece; //SelectedPiece
+    for (const piece of pieces) {
+        if (piece.x == selected[1] && piece.y == selected[2]) {
+            lastSelectedPiece = piece;
+        }
+        if (piece.x == x && piece.y == y) {
+            selectedPiece = piece;
+        }
+    }
+    //try to move the piece if there was selection before 
+    if (selected.length !== 0) {
         //get moves of last select
         let lastMoves = getMoves(selected[1], selected[2]);
 
-        //check if last clicked spot wasnt empty
-        if(lastMoves.length > 0) {//check if clicked spot is a move spot
+        //check if last clicked spot wasnt empty & right turn
+        if(lastMoves.length > 0 && lastSelectedPiece.isWhite === isWhiteTurn) { //check if clicked spot is a move spot
             for (let i = 0; i < lastMoves[0].length; i+=2) {
                 if(lastMoves[0][i] == x && lastMoves[0][i+1] == y) {
-                    colorSelected = movePiece(x, y);
+                    colorSelected = movePiece(lastSelectedPiece, x, y);
                 }
             }
 
             //check if clicked spot is a eat spot
             for (let i = 0; i < lastMoves[1].length; i+=2) {
                 if(lastMoves[1][i] == x && lastMoves[1][i+1] == y) {
-                    colorSelected = eatPiece(x, y);
+                    colorSelected = eatPiece(lastSelectedPiece, selectedPiece, x, y);
                 }
             }
 
         }
-        //repaint the whole board
-        repaintBoard();
-
-        selected[0] = event.currentTarget;
-        selected[1] = x;
-        selected[2] = y;
-        if(colorSelected) {
-            //color the current selected pixel
-            selected[0].classList.add('selected');
-        
-            //paint possible moves for selected piece
-            showMoves(x, y);
+        if (selectedPiece !== undefined) {
+            if (selectedPiece.isWhite === isWhiteTurn) {
+                finishFrame(event.currentTarget, colorSelected, x, y);
+            } else {
+                //repaint the whole board
+                finishFrame(event.currentTarget, false, x, y);
+            }
+        } else { //if the currentTarget is not containing any piece
+            finishFrame(event.currentTarget, colorSelected, x, y);
         }
 
     //if there wasnt a selection before
     } else if(selected.length === 0) {
-        selected[0] = event.currentTarget;
-        selected[1] = x;
-        selected[2] = y;
-
-        //color the current selected pixel
-        selected[0].classList.add('selected');
-        
-        //paint possible moves for selected piece
-        showMoves(x, y);
-
+        if (selectedPiece !== undefined) {
+            if (selectedPiece.isWhite === isWhiteTurn) {
+                finishFrame(event.currentTarget, true, x, y);
+            } else {
+                finishFrame(event.currentTarget, false, x, y);
+            }
+        } else { //if the currentTarget is not containing any piece
+            finishFrame(event.currentTarget, true, x, y);
+        }
     }
 }
+
+function finishFrame(currentTarget, paintSelected, x, y) {
+    selected[0] = currentTarget;
+    selected[1] = x;
+    selected[2] = y;
+
+    //repaint the whole board
+    repaintBoard();
+
+    if(paintSelected) {
+        //color the current selected pixel
+        currentTarget.classList.add('selected');
+            
+        //paint possible moves for selected piece
+        showMoves(x, y);
+    }
+
+}
+
 
 function repaintBoard() {
     const table = document.getElementsByTagName("table");
