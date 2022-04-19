@@ -1,9 +1,10 @@
 window.addEventListener('load', mainFunc);
 
-let pieces = []; //array that contains all the game pieces
+let boardData = new BoardData();
 let selected = [];
 let isWhiteTurn = true;
 
+//TODO: add paintBoard class? or move the other funcs to boardData too
 function mainFunc() {
     const body = document.body;
     const table = document.createElement('table');
@@ -11,7 +12,7 @@ function mainFunc() {
 
     body.appendChild(table);
 
-    placePieces(); //adds the pieces to the array
+    boardData.placePieces(); //adds the pieces to the array
 
     for (let i = 0; i < 8; i++) {
         const tr = table.insertRow(i);
@@ -26,22 +27,9 @@ function mainFunc() {
         }
     }
 
-    pieces.forEach(piece => {
+    boardData.pieces.forEach(piece => {
         table.rows[piece.y].cells[piece.x].style.backgroundImage = "url(assets/" + piece.getImg() + ".png)";
     });
-}
-
-function movePiece(lastSelectedPiece, x, y) {
-    isWhiteTurn = !isWhiteTurn;
-    lastSelectedPiece.x = x;
-    lastSelectedPiece.y = y;
-    lastSelectedPiece.isfirstMove = false;
-    return false;
-}
-
-function eatPiece(lastSelectedPiece, selectedPiece, x, y) {
-    pieces.splice(pieces.indexOf(selectedPiece), 1);
-    return movePiece(lastSelectedPiece, x, y);
 }
 
 function clickedTD(event, x, y) {
@@ -50,7 +38,7 @@ function clickedTD(event, x, y) {
 
     let lastSelectedPiece; //lastSelectedPiece
     let selectedPiece; //SelectedPiece
-    for (const piece of pieces) {
+    for (const piece of boardData.pieces) {
         if (piece.x == selected[1] && piece.y == selected[2]) {
             lastSelectedPiece = piece;
         }
@@ -61,20 +49,22 @@ function clickedTD(event, x, y) {
     //try to move the piece if there was selection before 
     if (selected.length !== 0) {
         //get moves of last select
-        let lastMoves = getMoves(selected[1], selected[2]);
+        let lastMoves = boardData.getMoves(selected[1], selected[2]);
 
         //check if last clicked spot wasnt empty & right turn
         if(lastMoves.length > 0 && lastSelectedPiece.isWhite === isWhiteTurn) { //check if clicked spot is a move spot
             for (let i = 0; i < lastMoves[0].length; i+=2) {
                 if(lastMoves[0][i] == x && lastMoves[0][i+1] == y) {
-                    colorSelected = movePiece(lastSelectedPiece, x, y);
+                    boardData.movePiece(lastSelectedPiece, x, y);
+                    colorSelected = false;
                 }
             }
 
             //check if clicked spot is a eat spot
             for (let i = 0; i < lastMoves[1].length; i+=2) {
                 if(lastMoves[1][i] == x && lastMoves[1][i+1] == y) {
-                    colorSelected = eatPiece(lastSelectedPiece, selectedPiece, x, y);
+                    boardData.eatPiece(lastSelectedPiece, selectedPiece, x, y);
+                    colorSelected = false;
                 }
             }
 
@@ -134,27 +124,14 @@ function repaintBoard() {
             table[0].rows[y].cells[x].style.backgroundImage = "";
         }
     }
-    pieces.forEach(piece => {
+    boardData.pieces.forEach(piece => {
         table[0].rows[piece.y].cells[piece.x].style.backgroundImage = "url(assets/" + piece.getImg() + ".png)";
     });
 
 }
 
-function getMoves(x,y) {
-    let output = [];
-    //get possible moves for piece
-    pieces.forEach(piece => {
-        if (piece.x == x && piece.y == y) {
-            piece.possibleMoves(pieces).forEach(move => {
-                output.push(move);
-            });
-        }
-    });
-    return output;
-}
-
 function showMoves(x, y) {
-    let posMoves = getMoves(x,y);
+    let posMoves = boardData.getMoves(x,y);
     const table = document.getElementsByTagName("table");
     //paint possible moves on board
     const tds = document.getElementsByTagName("td");
@@ -167,28 +144,6 @@ function showMoves(x, y) {
         // eat moves
         for (let i = 0; i < posMoves[1].length; i+=2) {
             table[0].rows[posMoves[1][i + 1]].cells[posMoves[1][i]].classList.add('eatSpot');
-        }
-    }
-}
-
-function placePieces() {
-    for (let i = 0; i < 2; i++) {
-        //i !== 0 is white(true) pieces so the line number would be able to be i * 7
-        //purpose of i is 0 it places it in 0=y and when its 1 its y=7 cuz i*7
-        for (let j = 0; j < 16; j++) {
-            if(j == 0 || j == 7) {
-                pieces.push(new c_piece(j, i * 7, 2, i !== 0, true)); //rook
-            } else if(j == 1 || j == 6) {
-                pieces.push(new c_piece(j, i * 7, 4, i !== 0, true)); //knight
-            } else if(j == 2 || j == 5) {
-                pieces.push(new c_piece(j, i * 7, 3, i !== 0, true)); //bishop
-            } else if(j == 3) {
-                pieces.push(new c_piece(j, i * 7, 1, i !== 0, true)); //queen
-            } else if(j == 4) {
-                pieces.push(new c_piece(j, i * 7, 0, i !== 0, true)); //king
-            } else if(j > 7) {
-                pieces.push(new c_piece(j-8, i*5 + 1, 5, i !== 0, true)); //pawn
-            } 
         }
     }
 }

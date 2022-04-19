@@ -216,11 +216,11 @@ class c_piece {
             this.detectionHandler(pieces, movesPos, eatPos, 1, 2);
         }
         //right T
-        if(this.x <= 4 && this.y >= 1)
+        if(this.x <= 5 && this.y >= 1)
         {
             this.detectionHandler(pieces, movesPos, eatPos, 2, -1);
         }
-        if(this.x <= 4 && this.y <= 6)
+        if(this.x <= 5 && this.y <= 6)
         {
             this.detectionHandler(pieces, movesPos, eatPos, 2, 1);
         }
