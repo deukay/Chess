@@ -202,25 +202,25 @@ class c_piece {
         {
             this.detectionHandler(pieces, movesPos, eatPos, -1, -2);
         }
-        if(this.x + 1 <= 8 && this.y - 2 >= 0)
+        if(this.x + 1 <= 7 && this.y - 2 >= 0)
         {
             this.detectionHandler(pieces, movesPos, eatPos, 1, -2);
         }
         //down T
-        if(this.x - 1 >= 0 && this.y + 2 <= 8)
+        if(this.x - 1 >= 0 && this.y + 2 <= 7)
         {
             this.detectionHandler(pieces, movesPos, eatPos, -1, 2);
         }
-        if(this.x + 1 <= 8 && this.y + 2 <= 8)
+        if(this.x + 1 <= 7 && this.y + 2 <= 7)
         {
             this.detectionHandler(pieces, movesPos, eatPos, 1, 2);
         }
         //right T
-        if(this.x < 5 && this.y > 0)
+        if(this.x <= 4 && this.y >= 1)
         {
             this.detectionHandler(pieces, movesPos, eatPos, 2, -1);
         }
-        if(this.x < 5 && this.y < 7)
+        if(this.x <= 4 && this.y <= 6)
         {
             this.detectionHandler(pieces, movesPos, eatPos, 2, 1);
         }
