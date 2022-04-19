@@ -35,6 +35,7 @@ function movePiece(lastSelectedPiece, x, y) {
     isWhiteTurn = !isWhiteTurn;
     lastSelectedPiece.x = x;
     lastSelectedPiece.y = y;
+    lastSelectedPiece.isfirstMove = false;
     return false;
 }
 
@@ -158,10 +159,12 @@ function showMoves(x, y) {
     //paint possible moves on board
     const tds = document.getElementsByTagName("td");
     if(posMoves.length > 0) {
+        //possible moves
         for (let i = 0; i < posMoves[0].length; i+=2) {
             table[0].rows[posMoves[0][i + 1]].cells[posMoves[0][i]].classList.add('moveSpot');
         }
-    
+        
+        // eat moves
         for (let i = 0; i < posMoves[1].length; i+=2) {
             table[0].rows[posMoves[1][i + 1]].cells[posMoves[1][i]].classList.add('eatSpot');
         }

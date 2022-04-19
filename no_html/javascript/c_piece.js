@@ -7,10 +7,6 @@ class c_piece {
         this.isfirstMove = isfirstMove;
     }
 
-    getArrPos() { //TODO: can remove now, leaving for now cuz might use later
-        return this.y * 8 + this.x;
-    }
-
     getImg() {
         let output = "";
         switch (this.p_type) {
@@ -78,228 +74,29 @@ class c_piece {
         }
     }
 
-    //setting a default so we can call it again in queen
-    //move_type = this.p_type for recursion but cant use for some reason cuz js hates it
-    //TODO: maybe move each switch to a func so it will be more readable
-    possibleMoves(pieces, move_type = this.p_type) {
+    possibleMoves(pieces) {
         let movesPos = [];
         let eatPos = [];
-        switch (move_type) {
+        switch (this.p_type) {
             //black pieces 0-5
             case 0: //King moveset
-                if(this.x < 7) {//right
-                    this.detectionHandler(pieces, movesPos, eatPos, 1, 0);
-                    if(this.y < 7) {//down right
-                        this.detectionHandler(pieces, movesPos, eatPos, 1, 1);
-                    }
-                    if(this.y > 0) {//top right
-                        this.detectionHandler(pieces, movesPos, eatPos, 1, -1);
-                    }
-                }
-                if(this.x > 0) {//left
-                    this.detectionHandler(pieces, movesPos, eatPos, -1, 0);
-                    if(this.y < 7) {//down left
-                        this.detectionHandler(pieces, movesPos, eatPos, -1, 1);
-                    }
-                    if(this.y > 0) {//top left
-                        this.detectionHandler(pieces, movesPos, eatPos, -1, -1);
-                    }
-                }
-                if(this.y < 7) {//down
-                    this.detectionHandler(pieces, movesPos, eatPos, 0, 1);
-                }
-                if(this.y > 0) {//up
-                    this.detectionHandler(pieces, movesPos, eatPos, 0, -1);
-                }
+                this.getKingPosMoves(pieces, movesPos, eatPos);
                 break;
             case 1: //Queen = Rook + Bishop movesets
-                /*
-                //Copy the Rook moveset
-                movesPos = Array.from(this.possibleMoves(2));
-                //Copy the Bishop moveset
-                this.possibleMoves(3).forEach(position => {
-                    movesPos.push(position)
-                });
-                */
-                // for some reason js hates recursion so I have to copy this all of these from below
-                // like that instead vv...
-                //rook moveset
-                if(this.x < 7) { // +x (right side)
-                    for (let i = 1; i <= 7 - this.x; i++) {
-                        if(this.detectionHandler(pieces, movesPos, eatPos, i, 0)) {
-                            break;
-                        } 
-                    }
-                }
-                if(this.x > 0) {// -x (left side)
-                    for (let i = 1; i <= this.x; i++) {
-                        if(this.detectionHandler(pieces, movesPos, eatPos, -i, 0)) {
-                            break;
-                        } 
-                    }
-                }
-                if(this.y < 7) { // +y (right side)
-                    for (let i = 1; i <= 7 - this.y; i++) {
-                        if(this.detectionHandler(pieces, movesPos, eatPos, 0, i)) {
-                            break;
-                        } 
-                    }
-                }
-                if(this.y > 0) {// -y (left side)
-                    for (let i = 1; i <= this.y; i++) {
-                        if(this.detectionHandler(pieces, movesPos, eatPos, 0, -i)) {
-                            break;
-                        } 
-                    }
-                }
-                //Bishop moveset
-                if(this.y < 7 && this.x < 7) {
-                    for (let i = 1; i < Math.min(8 - this.x, 8 - this.y); i++) { // +x +y (diag down right)
-                        if(this.detectionHandler(pieces, movesPos, eatPos, i, i)) {
-                            break;
-                        } 
-                        
-                    }
-                }
-                if(this.y < 7 && this.x > 0) {
-                    for (let i = 1; i <= Math.min(this.x, 8 - (this.y+1)); i++) { // -x -y (diag down left)
-                        if(this.detectionHandler(pieces, movesPos, eatPos, -i, i)) {
-                            break;
-                        } 
-                    }
-                }
-                if(this.y > 0 && this.x > 0) {
-                    for (let i = 1; i <= Math.min(this.x, this.y); i++) { // -x -y (diag up left)
-                        if(this.detectionHandler(pieces, movesPos, eatPos, -i, -i)) {
-                            break;
-                        } 
-                    }
-                }
-                if(this.y > 0 && this.x < 7) {
-                    for (let i = 1; i < Math.min(8 - this.x, this.y+1); i++) { // -x -y (diag up right)
-                        if(this.detectionHandler(pieces, movesPos, eatPos, i, -i)) {
-                            break;
-                        } 
-                    }
-                }
+                this.getRookPosMoves(pieces, movesPos, eatPos);
+                this.getBishopPosMoves(pieces, movesPos, eatPos);
                 break;
             case 2: //Rook moveset
-                if(this.x < 7) { // +x (right side)
-                    for (let i = 1; i <= 7 - this.x; i++) {
-                        if(this.detectionHandler(pieces, movesPos, eatPos, i, 0)) {
-                            break;
-                        } 
-                    }
-                }
-                if(this.x > 0) {// -x (left side)
-                    for (let i = 1; i <= this.x; i++) {
-                        if(this.detectionHandler(pieces, movesPos, eatPos, -i, 0)) {
-                            break;
-                        } 
-                    }
-                }
-                if(this.y < 7) { // +y (right side)
-                    for (let i = 1; i <= 7 - this.y; i++) {
-                        if(this.detectionHandler(pieces, movesPos, eatPos, 0, i)) {
-                            break;
-                        } 
-                    }
-                }
-                if(this.y > 0) {// -y (left side)
-                    for (let i = 1; i <= this.y; i++) {
-                        if(this.detectionHandler(pieces, movesPos, eatPos, 0, -i)) {
-                            break;
-                        } 
-                    }
-                }
+                this.getRookPosMoves(pieces, movesPos, eatPos);
                 break;
             case 3: //Bishop moveset
-                if(this.y < 7 && this.x < 7) {
-                    for (let i = 1; i < Math.min(8 - this.x, 8 - this.y); i++) { // +x +y (diag down right)
-                        if(this.detectionHandler(pieces, movesPos, eatPos, i, i)) {
-                            break;
-                        } 
-                        
-                    }
-                }
-                if(this.y < 7 && this.x > 0) {
-                    for (let i = 1; i <= Math.min(this.x, 8 - (this.y+1)); i++) { // -x -y (diag down left)
-                        if(this.detectionHandler(pieces, movesPos, eatPos, -i, i)) {
-                            break;
-                        } 
-                    }
-                }
-                if(this.y > 0 && this.x > 0) {
-                    for (let i = 1; i <= Math.min(this.x, this.y); i++) { // -x -y (diag up left)
-                        if(this.detectionHandler(pieces, movesPos, eatPos, -i, -i)) {
-                            break;
-                        } 
-                    }
-                }
-                if(this.y > 0 && this.x < 7) {
-                    for (let i = 1; i < Math.min(8 - this.x, this.y+1); i++) { // -x -y (diag up right)
-                        if(this.detectionHandler(pieces, movesPos, eatPos, i, -i)) {
-                            break;
-                        } 
-                    }
-                }
+                this.getBishopPosMoves(pieces, movesPos, eatPos);
                 break;
             case 4: //Knight moveset
-                //up T
-                if(this.x - 1 >= 0 && this.y - 2 >= 0)
-                {
-                    this.detectionHandler(pieces, movesPos, eatPos, -1, -2);
-                }
-                if(this.x + 1 <= 8 && this.y - 2 >= 0)
-                {
-                    this.detectionHandler(pieces, movesPos, eatPos, 1, -2);
-                }
-                //down T
-                if(this.x - 1 >= 0 && this.y + 2 <= 8)
-                {
-                    this.detectionHandler(pieces, movesPos, eatPos, -1, 2);
-                }
-                if(this.x + 1 <= 8 && this.y + 2 <= 8)
-                {
-                    this.detectionHandler(pieces, movesPos, eatPos, 1, 2);
-                }
-                //right T
-                if(this.x < 5 && this.y > 0)
-                {
-                    this.detectionHandler(pieces, movesPos, eatPos, 2, -1);
-                }
-                if(this.x < 5 && this.y < 7)
-                {
-                    this.detectionHandler(pieces, movesPos, eatPos, 2, 1);
-                }
-                //left T
-                if(this.x > 1 && this.y > 0)
-                {
-                    this.detectionHandler(pieces, movesPos, eatPos, -2, -1);
-                }
-                if(this.x > 1 && this.y < 7)
-                {
-                    this.detectionHandler(pieces, movesPos, eatPos, -2, 1);
-                }
+                this.getKnightPosMoves(pieces, movesPos, eatPos);
                 break;
             case 5: //Pawn moveset
-                if(this.isWhite) {
-                    if(this.y > 0) {
-                        if (!this.detectionHandler(pieces, movesPos, eatPos, 0, -1)) {
-                            if (this.y > 1 && this.isfirstMove) {
-                                this.detectionHandler(pieces, movesPos, eatPos, 0, -2);
-                            }
-                        }
-                    }
-                } else {
-                    if(this.y < 7) {
-                        if (!this.detectionHandler(pieces, movesPos, eatPos, 0, 1)) {
-                            if (this.y < 6 && this.isfirstMove) {
-                                this.detectionHandler(pieces, movesPos, eatPos, 0, 2);
-                            }
-                        }
-                    }
-                }
+                this.getPawnsPosMoves(pieces, movesPos, eatPos);
                 break;
             default:
                 console.log("p_type out of bounds");
@@ -307,5 +104,154 @@ class c_piece {
         }
 
         return [movesPos, eatPos];
+    }
+
+    getKingPosMoves(pieces, movesPos, eatPos) {
+        if(this.x < 7) {//right
+            this.detectionHandler(pieces, movesPos, eatPos, 1, 0);
+            if(this.y < 7) {//down right
+                this.detectionHandler(pieces, movesPos, eatPos, 1, 1);
+            }
+            if(this.y > 0) {//top right
+                this.detectionHandler(pieces, movesPos, eatPos, 1, -1);
+            }
+        }
+        if(this.x > 0) {//left
+            this.detectionHandler(pieces, movesPos, eatPos, -1, 0);
+            if(this.y < 7) {//down left
+                this.detectionHandler(pieces, movesPos, eatPos, -1, 1);
+            }
+            if(this.y > 0) {//top left
+                this.detectionHandler(pieces, movesPos, eatPos, -1, -1);
+            }
+        }
+        if(this.y < 7) {//down
+            this.detectionHandler(pieces, movesPos, eatPos, 0, 1);
+        }
+        if(this.y > 0) {//up
+            this.detectionHandler(pieces, movesPos, eatPos, 0, -1);
+        }
+    }
+
+    getRookPosMoves(pieces, movesPos, eatPos) {
+        if(this.x < 7) { // +x (right side)
+            for (let i = 1; i <= 7 - this.x; i++) {
+                if(this.detectionHandler(pieces, movesPos, eatPos, i, 0)) {
+                    break;
+                } 
+            }
+        }
+        if(this.x > 0) {// -x (left side)
+            for (let i = 1; i <= this.x; i++) {
+                if(this.detectionHandler(pieces, movesPos, eatPos, -i, 0)) {
+                    break;
+                } 
+            }
+        }
+        if(this.y < 7) { // +y (right side)
+            for (let i = 1; i <= 7 - this.y; i++) {
+                if(this.detectionHandler(pieces, movesPos, eatPos, 0, i)) {
+                    break;
+                } 
+            }
+        }
+        if(this.y > 0) {// -y (left side)
+            for (let i = 1; i <= this.y; i++) {
+                if(this.detectionHandler(pieces, movesPos, eatPos, 0, -i)) {
+                    break;
+                } 
+            }
+        }
+    }
+
+    getBishopPosMoves(pieces, movesPos, eatPos) {
+        if(this.y < 7 && this.x < 7) {
+            for (let i = 1; i < Math.min(8 - this.x, 8 - this.y); i++) { // +x +y (diag down right)
+                if(this.detectionHandler(pieces, movesPos, eatPos, i, i)) {
+                    break;
+                } 
+                
+            }
+        }
+        if(this.y < 7 && this.x > 0) {
+            for (let i = 1; i <= Math.min(this.x, 8 - (this.y+1)); i++) { // -x -y (diag down left)
+                if(this.detectionHandler(pieces, movesPos, eatPos, -i, i)) {
+                    break;
+                } 
+            }
+        }
+        if(this.y > 0 && this.x > 0) {
+            for (let i = 1; i <= Math.min(this.x, this.y); i++) { // -x -y (diag up left)
+                if(this.detectionHandler(pieces, movesPos, eatPos, -i, -i)) {
+                    break;
+                } 
+            }
+        }
+        if(this.y > 0 && this.x < 7) {
+            for (let i = 1; i < Math.min(8 - this.x, this.y+1); i++) { // -x -y (diag up right)
+                if(this.detectionHandler(pieces, movesPos, eatPos, i, -i)) {
+                    break;
+                } 
+            }
+        }
+    }
+
+    getKnightPosMoves(pieces, movesPos, eatPos) {
+        //up T
+        if(this.x - 1 >= 0 && this.y - 2 >= 0)
+        {
+            this.detectionHandler(pieces, movesPos, eatPos, -1, -2);
+        }
+        if(this.x + 1 <= 8 && this.y - 2 >= 0)
+        {
+            this.detectionHandler(pieces, movesPos, eatPos, 1, -2);
+        }
+        //down T
+        if(this.x - 1 >= 0 && this.y + 2 <= 8)
+        {
+            this.detectionHandler(pieces, movesPos, eatPos, -1, 2);
+        }
+        if(this.x + 1 <= 8 && this.y + 2 <= 8)
+        {
+            this.detectionHandler(pieces, movesPos, eatPos, 1, 2);
+        }
+        //right T
+        if(this.x < 5 && this.y > 0)
+        {
+            this.detectionHandler(pieces, movesPos, eatPos, 2, -1);
+        }
+        if(this.x < 5 && this.y < 7)
+        {
+            this.detectionHandler(pieces, movesPos, eatPos, 2, 1);
+        }
+        //left T
+        if(this.x > 1 && this.y > 0)
+        {
+            this.detectionHandler(pieces, movesPos, eatPos, -2, -1);
+        }
+        if(this.x > 1 && this.y < 7)
+        {
+            this.detectionHandler(pieces, movesPos, eatPos, -2, 1);
+        }
+    }
+
+    getPawnsPosMoves(pieces, movesPos, eatPos) {
+        if(this.isWhite) {
+            if(this.y > 0) {
+                if (!this.detectionHandler(pieces, movesPos, eatPos, 0, -1)) {
+                    if (this.y > 1 && this.isfirstMove) {
+                        this.detectionHandler(pieces, movesPos, eatPos, 0, -2);
+                    }
+                }
+            }
+        } else {
+            if(this.y < 7) {
+                if (!this.detectionHandler(pieces, movesPos, eatPos, 0, 1)) {
+                    if (this.y < 6 && this.isfirstMove) {
+                        this.detectionHandler(pieces, movesPos, eatPos, 0, 2);
+                    }
+                }
+            }
+        }
     }
 }
