@@ -1,0 +1,250 @@
+body {
+    margin: 0px;
+    font-family: "arial";
+}
+
+table, tr {
+    border:1px solid black;
+}
+
+td {
+    border: 2px solid black;
+    padding: 5px;
+}
+
+.top_bar {
+    float: right;
+    height: max-content;
+    padding-bottom: 10px;
+    width: 100%;
+    top: 0px;
+    right: 0px;
+    background-color: #f8f9fa;
+}
+
+.top_bar_row {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+}
+
+.top_bar_row > img {
+    margin-top: 30px;
+    width: 60px;
+    height: 60px;
+}
+
+.top_bar_row > .collapse_button {
+    margin-top: 40px;
+    margin-right: 20px;
+    width: 40px;
+    height: 40px;
+    background-image: url('https://cdn.iconscout.com/icon/free/png-256/right-arrow-1767497-1502505.png');
+    background-size: cover;
+    background-color: #f8f9fa;
+    border: 0px;
+}
+
+.side_nav {
+    height: max-content;
+    width: 700px;
+    padding: 0px 10px 100px 30px;
+    background-color: #f8f9fa;
+}
+
+.side_nav  > a {
+    margin-top: 6px;
+    padding: 6px, 8px, 6px, 16px;
+    text-decoration: none;
+    font-size: 16px;
+    display: block;
+}
+
+.side_nav  > .lang_div {
+    width: 125px;
+    padding-right: 5px;
+    height: min-content;
+    background-color: #eaecf0;
+    border: solid 1px;
+    border-color: #abb1b8;
+    font-size: 12px;
+}
+
+.side_nav  > h4 {
+    font-weight: 300;
+    color: #63686b;
+}
+
+.side_nav  > hr {
+    border-color: #c8ccd1cc;
+}
+
+.main_nav {
+    background-color: #f8f9fa;
+    padding: 0px 15px;
+    width: max-content;
+    border: solid 1px;
+    border-color: #b2b8be;
+}
+
+.side_info {
+    margin: 20px 10px 0px 30px;
+    height: min-content;
+    width: min-content;
+    background-color: #f9f9f9;
+    border: solid 1px;
+    border-color: #c4c4c4;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+}
+
+.side_img {
+    margin: 20px 10px 0px 30px;
+    height: min-content;
+    width: min-content;
+    background-color: #f9f9f9;
+    border: solid 1px;
+    border-color: #c4c4c4;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+}
+
+.gallery, .side_info_line, .other_wiki_projects {
+    display: flex;
+    flex-direction: row;
+}
+
+.other_wiki_projects > .side_info > h5 {
+    width: 350px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.other_wiki_projects > .side_info > p > img {
+    width: 30px;
+    height: 30px;
+    padding: 0px 5px;
+    display: inline;
+}
+
+.side_info_line > a, p {
+    margin: 5px 15px;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.side_info > h5 {
+    margin: 10px 0px;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.side_info > hr {
+    width: 200px;
+    border-color: #ffecb2;
+    margin: 15px 5px;
+}
+
+.gallery_img {
+    margin: 20px 0px 0px 30px;
+    padding: 20px;
+    height: min-content;
+    width: min-content;
+    background-color: #f8f9fa;
+    border: solid 1px;
+    border-color: #d9dbdf;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+}
+
+.side_img  > img {
+    width: 250px;
+    height: 180px;
+    padding: 5px;
+}
+
+.side_img  > p {
+    font-size: 12px;
+}
+
+.side_img  > p > a {
+    color: #e04f4f;
+}
+
+.side_info > a > .small_logo {
+    height: 25px;
+    width: 25px;
+    padding-left: 5px;
+}
+
+.main > p > .small_logo {
+    height: 25px;
+    width: 25px;
+    padding-right: 5px;
+}
+
+.main > .small_text {
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.side_info > h4 {
+    margin: 5px;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    background-color: #90ee90;
+}
+
+.side_info > a {
+    font-size: 14px;
+    margin: 5px;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+.side_info > img {
+    width: 250px;
+    height: 250px;
+    padding: 0px 5px;
+}
+
+.main_nav > li, a {
+    text-decoration: none;
+}
+
+.main_win {
+    display: flex;
+    flex-direction: row;
+}
+
+.main_rows {
+    display: flex;
+    flex-direction: row;
+}
+
+.page {
+    display: flex;
+    flex-direction: column;
+}
+
+.main {
+    margin-right: 15px;
+}
+
+.main > hr {
+    margin-right: 15px;
+    color: #d0d4d8;
+}
+
+.image_size {
+    width: 100px;
+    height: 100px;
+}
