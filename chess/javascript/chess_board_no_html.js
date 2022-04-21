@@ -33,9 +33,9 @@ function mainFunc() {
             }
             td.onclick = (e) => {clickedTD(e, j, i)};
             if ((j + i) % 2 != 0) {
-                td.className = "lightSquare"
+                td.className = "darkSquare";
             } else {
-                td.className = "darkSquare"
+                td.className = "lightSquare";
             }
         }
     }
