@@ -9,6 +9,7 @@ table {
 
 td {
     display: flex;
+    position: relative; /* position is relative so we will be able to add the position marks */
     background-repeat: no-repeat;
     background-position: center;
     transition: 0.15s;
@@ -30,25 +31,81 @@ tr {
 }
 
 .selected {
+    z-index: 2;
     background-color: orange;
-    outline: 4px solid black;
-    outline-offset: -4px;
+    outline: 3px solid black;
+    outline-offset: -3px;
     transform: scale(1.05);
 }
 
 .moveSpot {
+    z-index: 1;
     outline: 3px dashed gold;
     outline-offset: -25px;
 }
 
 .eatSpot {
+    z-index: 1;
     outline: 3px dashed red;
     outline-offset: -25px;
 }
 
 td:hover {
+    z-index: 3;
     outline: 2px solid black;
     outline-offset: -2px;
     transform: scale(1.1);
 }
+
+.topHeader {
+    position: absolute;
+    top: 5%;
+    left: 50%;
+    color: #485c36;
+    transform: translate(-50%, -50%);
+}
+
+.blackMove {
+    position: absolute;
+    bottom: 4%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 8%;
+    padding: 8px;
+    border: 3px solid #5b7242;
+    color: black;
+    background-color: #75955698;
+}
+
+.whiteMove {
+    position: absolute;
+    bottom: 4%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 8%;
+    padding: 8px;
+    border: 3px solid #5b7242;
+    color: white;
+    background-color: #75955698;
+}
+
+.positionElementLetter {
+    position: absolute;
+    right: 5px;
+    bottom: 50%;
+    color: rgb(196, 196, 196);
+}
+
+.positionElementNumber {
+    position: absolute;
+    left: 5px;
+    top: 50%;
+    color: rgb(196, 196, 196);
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #b0d488;
+}
+
 

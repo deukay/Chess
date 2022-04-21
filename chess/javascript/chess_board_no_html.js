@@ -16,8 +16,21 @@ function mainFunc() {
 
     for (let i = 0; i < 8; i++) {
         const tr = table.insertRow(i);
+
         for (let j = 0; j < 8; j++) {
             const td = tr.insertCell(j);
+            if(i == 0) { //(first row - a to h)
+                const positionElement = document.createElement('h6');
+                positionElement.innerText = String.fromCharCode(65 + j); //65 is A in ascii
+                positionElement.classList.add('positionElementLetter');
+                td.appendChild(positionElement);
+            }
+            if(j == 0) { //(first column - 1 to 8)
+                const positionElement = document.createElement('h6');
+                positionElement.innerText = i + 1;
+                positionElement.classList.add('positionElementNumber');
+                td.appendChild(positionElement);
+            }
             td.onclick = (e) => {clickedTD(e, j, i)};
             if ((j + i) % 2 != 0) {
                 td.className = "lightSquare"
@@ -146,4 +159,19 @@ function showMoves(x, y) {
             table[0].rows[posMoves[1][i + 1]].cells[posMoves[1][i]].classList.add('eatSpot');
         }
     }
+}
+
+function changeTurn() {
+    if(isWhiteTurn) {
+        const turn_display = document.getElementById("turn_display");
+        turn_display.innerText = "Black's Move";
+        turn_display.classList.add('blackMove');
+        turn_display.classList.remove('whiteMove');
+    } else {
+        const turn_display = document.getElementById("turn_display");
+        turn_display.innerText = "White's Move";
+        turn_display.classList.add('whiteMove');
+        turn_display.classList.remove('blackMove');
+    }
+    isWhiteTurn = !isWhiteTurn;
 }

@@ -28,11 +28,10 @@ class BoardData {
     }
 
     movePiece(lastSelectedPiece, x, y) {
-        isWhiteTurn = !isWhiteTurn;
+        changeTurn();
         lastSelectedPiece.x = x;
         lastSelectedPiece.y = y;
         lastSelectedPiece.isfirstMove = false;
-        // return lastSelectedPiece;
     }
 
     getMoves(x, y) {
@@ -40,7 +39,6 @@ class BoardData {
         //get possible moves for piece
         let piece = this.getPiece(x, y);
 
-        // let pieceMoves =  piece.possibleMoves(this.pieces);
         if(piece != undefined) {
             piece.possibleMoves(this.pieces).forEach(move => {
                 output.push(move);
