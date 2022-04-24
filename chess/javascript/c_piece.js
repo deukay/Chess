@@ -6,6 +6,7 @@ class c_piece {
         this.isWhite = isWhite;
         this.isfirstMove = isfirstMove;
     }
+    //TODO: add getmovesindirection like what ofer did instead of the for loops
 
     getImg() {
         let output = "";
@@ -238,17 +239,45 @@ class c_piece {
     getPawnsPosMoves(pieces, movesPos, eatPos) {
         if(this.isWhite) {
             if(this.y > 0) {
-                if (!this.detectionHandler(pieces, movesPos, eatPos, 0, -1)) {
-                    if (this.y > 1 && this.isfirstMove) {
-                        this.detectionHandler(pieces, movesPos, eatPos, 0, -2);
+                //move positions
+                if(this.isEmpty(pieces, this.x, this.y - 1) === 0) {
+                    this.pushPos(movesPos, 0, -1);
+                    if (this.y > 1 && this.isfirstMove 
+                        && this.isEmpty(pieces, this.x, this.y - 2) === 0) {
+                        this.pushPos(movesPos, 0, -2);
+                    }
+                }
+                //eat positions
+                if(this.x > 0) {
+                    if(this.isEmpty(pieces, this.x - 1, this.y - 1) === 1) {
+                        this.pushPos(eatPos, -1, -1);
+                    }
+                }
+                if(this.x < 7) {
+                    if(this.isEmpty(pieces, this.x + 1, this.y - 1) === 1) {
+                        this.pushPos(eatPos, 1, -1);
                     }
                 }
             }
         } else {
             if(this.y < 7) {
-                if (!this.detectionHandler(pieces, movesPos, eatPos, 0, 1)) {
-                    if (this.y < 6 && this.isfirstMove) {
-                        this.detectionHandler(pieces, movesPos, eatPos, 0, 2);
+                //move positions
+                if(this.isEmpty(pieces, this.x, this.y + 1) === 0) {
+                    this.pushPos(movesPos, 0, 1);
+                    if (this.y < 6 && this.isfirstMove
+                        && this.isEmpty(pieces, this.x, this.y + 2) === 0) {
+                            this.pushPos(movesPos, 0, 2);
+                    }
+                }
+                //eat positions
+                if(this.x > 0) {
+                    if(this.isEmpty(pieces, this.x - 1, this.y + 1) === 1) {
+                        this.pushPos(eatPos, -1, 1);
+                    }
+                }
+                if(this.x < 7) {
+                    if(this.isEmpty(pieces, this.x + 1, this.y + 1) === 1) {
+                        this.pushPos(eatPos, 1, 1);
                     }
                 }
             }
