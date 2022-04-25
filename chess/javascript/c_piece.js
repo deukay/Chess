@@ -6,7 +6,6 @@ class c_piece {
         this.isWhite = isWhite;
         this.isfirstMove = isfirstMove;
     }
-    //TODO: add getmovesindirection like what ofer did instead of the for loops
 
     getImg() {
         let output = "";
@@ -45,12 +44,12 @@ class c_piece {
         for (const piece of pieces) {
             if(piece.x == x && piece.y == y) {
                 if (piece.isWhite == this.isWhite) {
-                    return 2;
+                    return 2; //same color
                 }
-                return 1;
+                return 1; //other color piece
             }
         }
-        return 0;
+        return 0; //empty
     }
 
     pushPos(arr, x_move, y_move) {
@@ -136,64 +135,44 @@ class c_piece {
 
     getRookPosMoves(pieces, movesPos, eatPos) {
         if(this.x < 7) { // +x (right side)
-            for (let i = 1; i <= 7 - this.x; i++) {
-                if(this.detectionHandler(pieces, movesPos, eatPos, i, 0)) {
-                    break;
-                } 
-            }
+            this.getMovesInDirection(8 - this.x, 1, 0, pieces, movesPos, eatPos);
         }
         if(this.x > 0) {// -x (left side)
-            for (let i = 1; i <= this.x; i++) {
-                if(this.detectionHandler(pieces, movesPos, eatPos, -i, 0)) {
-                    break;
-                } 
-            }
+            this.getMovesInDirection(this.x + 1, -1, 0, pieces, movesPos, eatPos);
         }
         if(this.y < 7) { // +y (right side)
-            for (let i = 1; i <= 7 - this.y; i++) {
-                if(this.detectionHandler(pieces, movesPos, eatPos, 0, i)) {
-                    break;
-                } 
-            }
+            this.getMovesInDirection(8 - this.y, 0, 1, pieces, movesPos, eatPos);
         }
         if(this.y > 0) {// -y (left side)
-            for (let i = 1; i <= this.y; i++) {
-                if(this.detectionHandler(pieces, movesPos, eatPos, 0, -i)) {
-                    break;
-                } 
-            }
+            this.getMovesInDirection(this.y + 1, 0, -1, pieces, movesPos, eatPos);
         }
     }
 
     getBishopPosMoves(pieces, movesPos, eatPos) {
         if(this.y < 7 && this.x < 7) {
-            for (let i = 1; i < Math.min(8 - this.x, 8 - this.y); i++) { // +x +y (diag down right)
-                if(this.detectionHandler(pieces, movesPos, eatPos, i, i)) {
-                    break;
-                } 
-                
-            }
+            // +x +y (diag down right)
+            this.getMovesInDirection(Math.min(8 - this.x, 8 - this.y), 1, 1, pieces, movesPos, eatPos);
         }
         if(this.y < 7 && this.x > 0) {
-            for (let i = 1; i <= Math.min(this.x, 8 - (this.y+1)); i++) { // -x -y (diag down left)
-                if(this.detectionHandler(pieces, movesPos, eatPos, -i, i)) {
-                    break;
-                } 
-            }
+            // -x +y (diag down left)
+            this.getMovesInDirection(Math.min(this.x, 8 - (this.y+1)) + 1, -1, 1, pieces, movesPos, eatPos);
         }
         if(this.y > 0 && this.x > 0) {
-            for (let i = 1; i <= Math.min(this.x, this.y); i++) { // -x -y (diag up left)
-                if(this.detectionHandler(pieces, movesPos, eatPos, -i, -i)) {
-                    break;
-                } 
-            }
+            // -x -y (diag up left)
+            this.getMovesInDirection(Math.min(this.x, this.y) + 1, -1, -1, pieces, movesPos, eatPos);
         }
         if(this.y > 0 && this.x < 7) {
-            for (let i = 1; i < Math.min(8 - this.x, this.y+1); i++) { // -x -y (diag up right)
-                if(this.detectionHandler(pieces, movesPos, eatPos, i, -i)) {
-                    break;
-                } 
-            }
+            // -x -y (diag up right)
+            this.getMovesInDirection(Math.min(8 - this.x, this.y+1), 1, -1, pieces, movesPos, eatPos);
+        }
+    }
+
+    getMovesInDirection(loop_length, x_multiplier, y_multiplier, pieces, movesPos, eatPos) {
+        //x,y multipliers => -1 = move negative | 0 = dont move | 1 = move positive
+        for (let i = 1; i < loop_length; i++) { 
+            if(this.detectionHandler(pieces, movesPos, eatPos, i * x_multiplier, i * y_multiplier)) {
+                break;
+            } 
         }
     }
 
