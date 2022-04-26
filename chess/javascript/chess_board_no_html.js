@@ -55,7 +55,7 @@ function clickedTD(event, x, y) {
         //get moves of last select
         let lastMoves = boardData.getMoves(boardData.selected[1], boardData.selected[2]);
 
-        //check if last clicked spot wasnt empty & right turn
+        //check if last clicked spot wasnt empty & piece color == turn color
         if(lastMoves.length > 0 && lastSelectedPiece.isWhite === boardData.isWhiteTurn) { //check if clicked spot is a move spot
             for (let i = 0; i < lastMoves[0].length; i+=2) {
                 if(lastMoves[0][i] == x && lastMoves[0][i+1] == y) {
