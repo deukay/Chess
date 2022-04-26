@@ -5,6 +5,43 @@ class Game {
     }
 
     /** funcs that paint the board **/
+
+    createTable(numOfRows, numOfColumns) {
+        const body = document.body;
+        const table = document.createElement('table');
+        table.id = "chess_table";
+    
+        body.appendChild(table);
+        for (let i = 0; i < numOfRows; i++) {
+            const tr = table.insertRow(i);
+    
+            for (let j = 0; j < numOfColumns; j++) {
+                const td = tr.insertCell(j);
+                if(i == 0) { //(first row - a to h)
+                    const positionElement = document.createElement('h6');
+                    positionElement.innerText = String.fromCharCode(65 + j); //65 is A in ascii
+                    positionElement.classList.add('positionElementLetter');
+                    td.appendChild(positionElement);
+                }
+                if(j == 0) { //(first column - 1 to 8)
+                    const positionElement = document.createElement('h6');
+                    positionElement.innerText = i + 1;
+                    positionElement.classList.add('positionElementNumber');
+                    td.appendChild(positionElement);
+                }
+                td.onclick = (e) => {clickedTD(e, j, i)};
+                if ((j + i) % 2 != 0) {
+                    td.className = "darkSquare";
+                } else {
+                    td.className = "lightSquare";
+                }
+            }
+        }
+
+        //place pieces pictures on the table
+        this.placePictures();
+    }
+
     showMoves(x, y) {
         let posMoves = this.boardData.getMoves(x,y);
         const table = document.getElementById("chess_table");

@@ -2,8 +2,8 @@ class BoardData {
     constructor(isWhiteFirst) {
         this.pieces = [];
         this.selected = [];
+        this.placePieces();
         this.isWhiteTurn = isWhiteFirst;
-        //maybe initialize pieces here instead of inside a func?
     }
 
     /** funcs that change data **/
