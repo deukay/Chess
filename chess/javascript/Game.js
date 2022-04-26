@@ -35,7 +35,7 @@ class Game {
             }
         }
 
-        this.boardData.placePictures();
+        this.placePictures();
 
     }
 
