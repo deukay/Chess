@@ -1,6 +1,7 @@
 window.addEventListener('load', mainFunc);
 
-let boardData = new BoardData();
+let game = new Game(true);
+let boardData = game.boardData;
 
 function mainFunc() {
     const body = document.body;
@@ -38,7 +39,7 @@ function mainFunc() {
         }
     }
 
-    boardData.placePictures();
+    game.placePictures();
 }
 
 //called when a cell(td) is clicked
@@ -74,25 +75,25 @@ function clickedTD(event, x, y) {
         }
         if (selectedPiece !== undefined) {
             if (selectedPiece.isWhite === boardData.isWhiteTurn) {
-                boardData.finishFrame(event.currentTarget, colorSelected, x, y);
+                game.finishFrame(event.currentTarget, colorSelected, x, y);
             } else {
                 //repaint the whole board
-                boardData.finishFrame(event.currentTarget, false, x, y);
+                game.finishFrame(event.currentTarget, false, x, y);
             }
         } else { //if the currentTarget is not containing any piece
-            boardData.finishFrame(event.currentTarget, colorSelected, x, y);
+            game.finishFrame(event.currentTarget, colorSelected, x, y);
         }
 
     //if there wasnt a selection before
     } else if(boardData.selected.length === 0) {
         if (selectedPiece !== undefined) {
             if (selectedPiece.isWhite === boardData.isWhiteTurn) {
-                boardData.finishFrame(event.currentTarget, true, x, y);
+                game.finishFrame(event.currentTarget, true, x, y);
             } else {
-                boardData.finishFrame(event.currentTarget, false, x, y);
+                game.finishFrame(event.currentTarget, false, x, y);
             }
         } else { //if the currentTarget is not containing any piece
-            boardData.finishFrame(event.currentTarget, true, x, y);
+            game.finishFrame(event.currentTarget, true, x, y);
         }
     }
 }
