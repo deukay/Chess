@@ -7,31 +7,31 @@ class Game {
     /** funcs that paint the board **/
     showMoves(x, y) {
         let posMoves = this.boardData.getMoves(x,y);
-        const table = document.getElementsByTagName("table");
+        const table = document.getElementById("chess_table");
         //paint possible moves on board
         const tds = document.getElementsByTagName("td");
         if(posMoves.length > 0) {
             //possible moves
             for (let i = 0; i < posMoves[0].length; i+=2) {
-                table[0].rows[posMoves[0][i + 1]].cells[posMoves[0][i]].classList.add('moveSpot');
+                table.rows[posMoves[0][i + 1]].cells[posMoves[0][i]].classList.add('moveSpot');
             }
             
             // eat moves
             for (let i = 0; i < posMoves[1].length; i+=2) {
-                table[0].rows[posMoves[1][i + 1]].cells[posMoves[1][i]].classList.add('eatSpot');
+                table.rows[posMoves[1][i + 1]].cells[posMoves[1][i]].classList.add('eatSpot');
             }
         }
     }
 
     repaintBoard() {
-        const table = document.getElementsByTagName("table");
+        const table = document.getElementById("chess_table");
 
         for (let y = 0; y < 8; y++) {
             for (let x = 0; x < 8; x++) {
-                table[0].rows[y].cells[x].classList.remove('selected');
-                table[0].rows[y].cells[x].classList.remove('moveSpot');
-                table[0].rows[y].cells[x].classList.remove('eatSpot');
-                table[0].rows[y].cells[x].style.backgroundImage = "";
+                table.rows[y].cells[x].classList.remove('selected');
+                table.rows[y].cells[x].classList.remove('moveSpot');
+                table.rows[y].cells[x].classList.remove('eatSpot');
+                table.rows[y].cells[x].style.backgroundImage = "";
             }
         }
 
@@ -40,9 +40,9 @@ class Game {
     }
 
     placePictures() {
-        const table = document.getElementsByTagName("table");
+        const table = document.getElementById("chess_table");
         this.boardData.pieces.forEach(piece => {
-            table[0].rows[piece.y].cells[piece.x].style.backgroundImage = "url(assets/" + piece.getImg() + ".png)";
+            table.rows[piece.y].cells[piece.x].style.backgroundImage = "url(assets/" + piece.getImg() + ".png)";
         });
     }
 

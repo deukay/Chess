@@ -6,7 +6,7 @@ let boardData = game.boardData;
 function mainFunc() {
     const body = document.body;
     const table = document.createElement('table');
-    table.setAttribute('id:', 'chess_table');
+    table.id = "chess_table";
 
     body.appendChild(table);
 
