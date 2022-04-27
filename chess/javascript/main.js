@@ -16,8 +16,8 @@ function clickedTD(event, x, y) {
     let prevSelectedPiece = boardData.getPiece(boardData.selected[1], boardData.selected[2]);
     let selectedPiece = boardData.getPiece(x, y);
 
-    //try to move the piece if there was selection before 
-    if (boardData.selected.length !== 0) {
+    //try to move the piece if there was selection before & there isnt a winner
+    if (boardData.selected.length !== 0 && !boardData.winner) {
         //get moves of previous select
         let prevMoves = boardData.getMoves(boardData.selected[1], boardData.selected[2]);
 
@@ -35,6 +35,9 @@ function clickedTD(event, x, y) {
                 if(prevMoves[1][i] == x && prevMoves[1][i+1] == y) {
                     boardData.eatPiece(prevSelectedPiece, selectedPiece, x, y);
                     colorSelected = false;
+                    if(selectedPiece.p_type == 0) { //if the eaten piece is a king
+                        game.finishGame();
+                    }
                 }
             }
 

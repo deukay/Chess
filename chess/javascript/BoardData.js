@@ -4,6 +4,7 @@ class BoardData {
         this.selected = [];
         this.placePieces();
         this.isWhiteTurn = isWhiteFirst;
+        this.winner = false;
     }
 
     /** funcs that change data **/
@@ -46,7 +47,7 @@ class BoardData {
     }
 
     pushPiece(x, y, p_type, isWhite, isfirstMove) {
-        this.pieces.push(new c_piece(x, y, p_type, isWhite, isfirstMove));
+        this.pieces.push(new Piece(x, y, p_type, isWhite, isfirstMove));
     }
 
     placePieces() {

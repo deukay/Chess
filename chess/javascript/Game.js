@@ -101,4 +101,20 @@ class Game {
     
     }
 
+    finishGame() {
+        this.boardData.winner = true;
+        const table = document.getElementById("chess_table");
+        const winnerPopup = document.createElement('div');
+        table.appendChild(winnerPopup);
+        winnerPopup.classList.add("winnerPopup");
+        if(!this.boardData.isWhiteTurn) { //opposite because the turn is switched after moving
+            winnerPopup.innerText = "White is the winner!";
+            winnerPopup.style.color = "white";
+        } else {
+            winnerPopup.innerText = "Black is the winner!";
+            winnerPopup.style.color = "black";
+        }
+        
+    }
+
 }

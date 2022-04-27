@@ -1,4 +1,4 @@
-class c_piece {
+class Piece {
     constructor(x, y, p_type, isWhite, isfirstMove) {
         this.x = x;
         this.y = y;
